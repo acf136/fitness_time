@@ -2,6 +2,7 @@ import 'package:fitness_time/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'profile_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -25,24 +26,27 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         leading: Icon(Icons.menu),
         centerTitle: true,
-        title: Text(widget.title),
-        // backgroundColor: Theme.of(context).backgroundColor ,
+        title: Text(
+          widget.title,
+          style: GoogleFonts.getFont('Montserrat'),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: InkWell(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ProfileState(profile: Profile(1,'Antonia Font',150, 60)))),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ProfileState(
+                      profile: Profile(1, 'Antonia Font', 150, 60)))),
               child: const Hero(
                 tag: "amtonia_font",
                 child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://randomuser.me/api/portraits/women/44.jpg'),
-                  ),
+                  backgroundImage: NetworkImage(
+                      'https://randomuser.me/api/portraits/women/44.jpg'),
+                ),
               ),
             ),
           ),
-        ],  // actions
+        ], // actions
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -58,22 +62,27 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Hola Diana, ',
-                        style: Theme.of(context).textTheme.headline4),
+                        style: GoogleFonts.montserrat(
+                            textStyle: Theme.of(context).textTheme.headline4)),
+                    SizedBox(height: 20), //separator
+                    SizedBox(
+                        height: 40,
+                        width: 300,
+                        child: Text(
+                            'Come 5 veces al día y permanece hidratada durante el dia',
+                            style: GoogleFonts.montserrat(
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyMedium))),
                     SizedBox(height: 20), //separator
                     SizedBox(
                       height: 40,
-                      width: 300,
                       child: Text(
-                          'Come 5 veces al día y permanece hidratada durante el dia',
-                          style: Theme.of(context).textTheme.bodyMedium),
-                    ),
-                    SizedBox(height: 20), //separator
-                    const SizedBox(
-                      height: 40,
-                      child: Text('Mas detalles',
-                          style: TextStyle(color: Colors.blue)
-                          // style: Theme.of(context).textTheme.subtitle2,
-                          ),
+                        'Mas detalles',
+                        style: GoogleFonts.montserrat(
+                          textStyle: Theme.of(context).textTheme.subtitle2,
+                          color: Colors.blue,
+                        ),
+                      ),
                     )
                   ],
                 )),
@@ -84,10 +93,10 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(0),
                   margin: const EdgeInsets.fromLTRB(20, 0, 10, 0),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Ultimas actividades',
-                          style: Theme.of(context).textTheme.subtitle2)
+                          style: GoogleFonts.montserrat(
+                              textStyle: Theme.of(context).textTheme.subtitle2))
                     ],
                   )),
             ),
@@ -122,7 +131,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Inicio",
@@ -141,29 +150,95 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class MyBottomNavigationBarItem extends BottomNavigationBarItem {
+  final Icon _icon = const Icon(Icons.question_mark);
+  String? _label;
+  Icon? _activeIcon;
+  Color? _backgroundColor;
+  String? _tooltip;
+
+  MyBottomNavigationBarItem({
+    required Icon icon,
+    String? label,
+    Icon? activeIcon,
+    Color? backgroundColor,
+    String? tooltip,
+  }) : super(
+          icon: icon,
+          label: label,
+          activeIcon: activeIcon,
+          backgroundColor: backgroundColor,
+          tooltip: tooltip,
+        );
+
+  @override
+  BottomNavigationBarItem build(BuildContext context) {
+    return BottomNavigationBarItem(
+        icon: _icon,
+        label: _label,
+        activeIcon: _activeIcon,
+        backgroundColor: _backgroundColor,
+        tooltip: _tooltip);
+  }
+}
+
 class HomeListCard extends StatelessWidget {
   final IconData icon = Icons.run_circle_outlined;
-
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Card(
         shadowColor: Colors.grey,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(icon),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text('Running, ', style: Theme.of(context).textTheme.headline6),
-                Text('Ayer 18:20')
-              ], // children
+            Flexible(
+              flex: 2,
+              child: Row(
+                children: [
+                  Icon(icon),
+                  SizedBox(width: 10), //separator
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Running, ',
+                        style: GoogleFonts.montserrat(
+                            textStyle: Theme.of(context).textTheme.headline6),
+                      ),
+                      Text('Ayer 18:20')
+                    ], // children
+                  ),
+                ],
+              ),
             ),
-            Text('7300 KM', style: Theme.of(context).textTheme.headline5),
+            Flexible(
+              flex: 1,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '7,300 km',
+                  style: GoogleFonts.montserrat(
+                      textStyle: Theme.of(context).textTheme.headline5),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
-}
+} // End of HomeListCard
+
+
+
+
+
+
+
+
+
+
+
+
+
