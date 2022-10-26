@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:fitness_time/screens/profile_page.dart';
+import 'package:fitness_time/screens/crono_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -19,6 +20,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentProfile = 0;
+
+  // To Manage BottomNavigatorBar
+  static List<Widget> _myPages = <Widget>[
+    HomePage(title: 'Fitness time',),
+    CronoPage(),
+    ProfilePage(),
+  ];
+  int _selectedIndex = 0;
+
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+  // To Manage BottomNavigatorBar
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () async {
                 await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const ProfileState(),
+                    builder: (context) => const ProfilePage(),
                   ),
                 );
                 setState(() {});
@@ -137,20 +154,23 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Inicio",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: "Buscar",
+            icon: Icon(Icons.timer),
+            label: "Crono",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: "Perfil",
           ),
         ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
       ),
     );
   }
@@ -179,12 +199,13 @@ class HomeListCard extends StatelessWidget {
     initializeDateFormatting('es_ES', null);
     // Intl.defaultLocale = 'es';
     DateTime dtAyer = DateTime.now().subtract(Duration(days: 1));
-    if ( _start.year == dtAyer.year && _start.month == dtAyer.month &&
-        _start.day == dtAyer.day  ) {
+    if (_start.year == dtAyer.year &&
+        _start.month == dtAyer.month &&
+        _start.day == dtAyer.day) {
       strAyer = 'Ayer';
     }
     String startActivity = '$strAyer ${DateFormat.yMMMd('es').format(_start)} '
-          '${DateFormat.Hm().format(_start)}';
+        '${DateFormat.Hm().format(_start)}';
     return Card(
       shadowColor: Colors.grey,
       child: Row(

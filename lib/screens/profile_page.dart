@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import '../widgets/inherited_profile.dart';
 import 'package:intl/intl.dart';
 
-class ProfileState extends StatefulWidget {
+class ProfilePage extends StatefulWidget {
   // final Profile profile;
 
-  const ProfileState({Key? key}) : super(key: key);
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<ProfileState> createState() {
-    return _ProfileState();
+  State<ProfilePage> createState() {
+    return _ProfilePageState();
   }
 }
 
-class _ProfileState extends State<ProfileState> {
+class _ProfilePageState extends State<ProfilePage> {
   bool _isEditingText = false;
   final TextEditingController _editingController = TextEditingController();
 

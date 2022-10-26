@@ -1,3 +1,4 @@
+import 'package:fitness_time/screens/crono_page.dart';
 import 'package:fitness_time/widgets/inherited_profile.dart';
 import 'package:flutter/material.dart';
 import 'screens/home_page.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
                   tertiary: Colors.grey,
                 )),
         home: const HomePage(
-          title: 'Fitness time',
+            title: 'Fitness time',
         ),
       ),
     );
