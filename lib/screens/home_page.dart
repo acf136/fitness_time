@@ -1,8 +1,12 @@
-import 'package:fitness_time/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'profile_page.dart';
+import 'package:fitness_time/screens/profile_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+import '../models/activity.dart';
+import '../widgets/inherited_profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -14,17 +18,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Widget> homeListCard = [
-    HomeListCard(),
-    HomeListCard(),
-    HomeListCard(),
-  ];
+  int currentProfile = 0;
 
   @override
   Widget build(BuildContext context) {
+    final InheritedProfiles inhProfile =
+        context.dependOnInheritedWidgetOfExactType<InheritedProfiles>()!;
+    currentProfile = inhProfile.setCurrent(currentProfile);
+
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.menu),
+        leading: const Icon(Icons.menu),
         centerTitle: true,
         title: Text(
           widget.title,
@@ -34,11 +38,16 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: InkWell(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ProfileState(
-                      profile: Profile(1, 'Antonia Font', 150, 60)))),
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileState(),
+                  ),
+                );
+                setState(() {});
+              },
               child: const Hero(
-                tag: "amtonia_font",
+                tag: "hero_tag",
                 child: CircleAvatar(
                   backgroundImage: NetworkImage(
                       'https://randomuser.me/api/portraits/women/44.jpg'),
@@ -61,10 +70,10 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hola Diana, ',
+                    Text(inhProfile.current().name, //'Diana, ',
                         style: GoogleFonts.montserrat(
                             textStyle: Theme.of(context).textTheme.headline4)),
-                    SizedBox(height: 20), //separator
+                    const SizedBox(height: 20), //separator
                     SizedBox(
                         height: 40,
                         width: 300,
@@ -73,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                             style: GoogleFonts.montserrat(
                                 textStyle:
                                     Theme.of(context).textTheme.bodyMedium))),
-                    SizedBox(height: 20), //separator
+                    const SizedBox(height: 20), //separator
                     SizedBox(
                       height: 40,
                       child: Text(
@@ -106,23 +115,20 @@ class _HomePageState extends State<HomePage> {
               margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  homeListCard[0],
-                  homeListCard[1],
-                  homeListCard[2],
-                ],
+                children: inhProfile.profiles[currentProfile].listActivities
+                    .map((a) => HomeListCard(a))
+                    .toList(),
               ),
             ),
-            //  Percent Indicator
             SizedBox(
               height: 200,
               child: CircularPercentIndicator(
                 radius: 50.0,
                 lineWidth: 15.0,
                 percent: 0.7,
-                center: Text('70%', style: const TextStyle(fontSize: 30)),
-                footer: Text('Objetivo mensual',
-                    style: const TextStyle(fontSize: 15)),
+                center: const Text('70%', style: TextStyle(fontSize: 30)),
+                footer: const Text('Objetivo mensual',
+                    style: TextStyle(fontSize: 15)),
                 backgroundColor: Colors.grey,
                 progressColor: Colors.deepPurpleAccent,
               ),
@@ -131,7 +137,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Inicio",
@@ -150,95 +156,73 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class MyBottomNavigationBarItem extends BottomNavigationBarItem {
-  final Icon _icon = const Icon(Icons.question_mark);
-  String? _label;
-  Icon? _activeIcon;
-  Color? _backgroundColor;
-  String? _tooltip;
-
-  MyBottomNavigationBarItem({
-    required Icon icon,
-    String? label,
-    Icon? activeIcon,
-    Color? backgroundColor,
-    String? tooltip,
-  }) : super(
-          icon: icon,
-          label: label,
-          activeIcon: activeIcon,
-          backgroundColor: backgroundColor,
-          tooltip: tooltip,
-        );
-
-  @override
-  BottomNavigationBarItem build(BuildContext context) {
-    return BottomNavigationBarItem(
-        icon: _icon,
-        label: _label,
-        activeIcon: _activeIcon,
-        backgroundColor: _backgroundColor,
-        tooltip: _tooltip);
-  }
-}
-
 class HomeListCard extends StatelessWidget {
   final IconData icon = Icons.run_circle_outlined;
+  String _name = '';
+  DateTime _start = DateTime.now();
+  DateTime? _end;
+  num? _quantity;
+
+  String? _dimension;
+
+  HomeListCard(Activity activity, {super.key}) {
+    _name = activity.name;
+    _start = activity.start;
+    _end = activity.end;
+    _quantity = activity.quantity;
+    _dimension = activity.dimension;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        shadowColor: Colors.grey,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              flex: 2,
-              child: Row(
-                children: [
-                  Icon(icon),
-                  SizedBox(width: 10), //separator
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Running, ',
-                        style: GoogleFonts.montserrat(
-                            textStyle: Theme.of(context).textTheme.headline6),
-                      ),
-                      Text('Ayer 18:20')
-                    ], // children
-                  ),
-                ],
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  '7,300 km',
-                  style: GoogleFonts.montserrat(
-                      textStyle: Theme.of(context).textTheme.headline5),
+    var strAyer = '';
+    initializeDateFormatting('es_ES', null);
+    // Intl.defaultLocale = 'es';
+    DateTime dtAyer = DateTime.now().subtract(Duration(days: 1));
+    if ( _start.year == dtAyer.year && _start.month == dtAyer.month &&
+        _start.day == dtAyer.day  ) {
+      strAyer = 'Ayer';
+    }
+    String startActivity = '$strAyer ${DateFormat.yMMMd('es').format(_start)} '
+          '${DateFormat.Hm().format(_start)}';
+    return Card(
+      shadowColor: Colors.grey,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(
+            flex: 7,
+            child: Row(
+              children: [
+                Icon(icon),
+                const SizedBox(width: 10), //separator
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _name,
+                      style: GoogleFonts.montserrat(
+                          textStyle: Theme.of(context).textTheme.headline6),
+                    ),
+                    Text(startActivity),
+                  ], // children
                 ),
+              ],
+            ),
+          ),
+          Flexible(
+            flex: 5,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '$_quantity $_dimension',
+                style: GoogleFonts.montserrat(
+                    textStyle: Theme.of(context).textTheme.headline5),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 } // End of HomeListCard
-
-
-
-
-
-
-
-
-
-
-
-
-
