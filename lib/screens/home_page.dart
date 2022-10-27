@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:fitness_time/screens/profile_page.dart';
-import 'package:fitness_time/screens/crono_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import '../models/activity.dart';
 import '../widgets/inherited_profile.dart';
 
@@ -20,22 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentProfile = 0;
-
-  // To Manage BottomNavigatorBar
-  static List<Widget> _myPages = <Widget>[
-    HomePage(title: 'Fitness time',),
-    CronoPage(),
-    ProfilePage(),
-  ];
-  int _selectedIndex = 0;
-
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-  // To Manage BottomNavigatorBar
 
   @override
   Widget build(BuildContext context) {
@@ -153,43 +135,24 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Inicio",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.timer),
-            label: "Crono",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Perfil",
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
     );
   }
 }
 
 class HomeListCard extends StatelessWidget {
   final IconData icon = Icons.run_circle_outlined;
-  String _name = '';
-  DateTime _start = DateTime.now();
-  DateTime? _end;
-  num? _quantity;
+  String name = '';
+  DateTime start = DateTime.now();
+  DateTime? end;
+  num? quantity;
 
   String? _dimension;
 
   HomeListCard(Activity activity, {super.key}) {
-    _name = activity.name;
-    _start = activity.start;
-    _end = activity.end;
-    _quantity = activity.quantity;
+    name = activity.name;
+    start = activity.start;
+    end = activity.end;
+    quantity = activity.quantity;
     _dimension = activity.dimension;
   }
 
@@ -198,14 +161,14 @@ class HomeListCard extends StatelessWidget {
     var strAyer = '';
     initializeDateFormatting('es_ES', null);
     // Intl.defaultLocale = 'es';
-    DateTime dtAyer = DateTime.now().subtract(Duration(days: 1));
-    if (_start.year == dtAyer.year &&
-        _start.month == dtAyer.month &&
-        _start.day == dtAyer.day) {
+    DateTime dtAyer = DateTime.now().subtract(const Duration(days: 1));
+    if (start.year == dtAyer.year &&
+        start.month == dtAyer.month &&
+        start.day == dtAyer.day) {
       strAyer = 'Ayer';
     }
-    String startActivity = '$strAyer ${DateFormat.yMMMd('es').format(_start)} '
-        '${DateFormat.Hm().format(_start)}';
+    String startActivity = '$strAyer ${DateFormat.yMMMd('es').format(start)} '
+        '${DateFormat.Hm().format(start)}';
     return Card(
       shadowColor: Colors.grey,
       child: Row(
@@ -221,7 +184,7 @@ class HomeListCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _name,
+                      name,
                       style: GoogleFonts.montserrat(
                           textStyle: Theme.of(context).textTheme.headline6),
                     ),
@@ -236,7 +199,7 @@ class HomeListCard extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerRight,
               child: Text(
-                '$_quantity $_dimension',
+                '$quantity $_dimension',
                 style: GoogleFonts.montserrat(
                     textStyle: Theme.of(context).textTheme.headline5),
               ),

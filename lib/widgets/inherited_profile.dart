@@ -11,7 +11,7 @@ class InheritedProfiles extends InheritedWidget {
     Profile(1, 'Antonia Font', DateTime.now() , 150, 60,
         DateTimeRange(start: dtstart, end: dtstart.add(const Duration(days: 2))),
         212.4, [
-      Activity(1, 0, NofActivity.running.name.toCapitalized(), DateTime.now().subtract(Duration(days: 1)),
+      Activity(1, 0, NofActivity.running.name.toCapitalized(), DateTime.now().subtract(const Duration(days: 1)),
           DateTime.now(), 1500.87, Dimension.km.name),
       Activity(1, 1, NofActivity.sauna.name.toCapitalized(), DateTime.now(),
           DateTime.now(), 204, Dimension.min.name),

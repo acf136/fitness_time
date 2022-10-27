@@ -42,15 +42,15 @@ class _ProfilePageState extends State<ProfilePage> {
     // 'October 10, 2012'
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () => Navigator.of(context).pop(),
-              tooltip: 'Back',
-            );
-          },
-        ),
+        // leading: Builder(
+        //   builder: (BuildContext context) {
+        //     return IconButton(
+        //       icon: const Icon(Icons.arrow_back_ios),
+        //       onPressed: () => Navigator.of(context).pop(),
+        //       tooltip: 'Back',
+        //     );
+        //   },
+        // ),
         title: const Text('My Profile'),
         centerTitle: true,
       ),

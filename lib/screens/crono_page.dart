@@ -2,11 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class CronoPage extends StatefulWidget {
+  const CronoPage({super.key});
+
   @override
-  _CronoPageState createState() => _CronoPageState();
+  CronoPageState createState() => CronoPageState();
 }
 
-class _CronoPageState extends State<CronoPage> {
+class CronoPageState extends State<CronoPage> {
   StreamSubscription<int>? timerSubscription;
   String hoursStr = '00';
   String minutesStr = '00';
@@ -17,7 +19,7 @@ class _CronoPageState extends State<CronoPage> {
   Stream<int> cronoStream() {
     var streamController = StreamController();
     Timer? timer;
-    Duration timerInterval = Duration(seconds: 1);
+    Duration timerInterval = const Duration(seconds: 1);
     int counterTick = 0;
 
     void stopTimer() {
@@ -58,26 +60,27 @@ class _CronoPageState extends State<CronoPage> {
   Widget build(BuildContext context) {
     Stream<int> timerStream;
     return Scaffold(
-      appBar: AppBar(title: Text("CronoMeter"), centerTitle: true),
+      appBar: AppBar(title: const Text("CronoMeter"), centerTitle: true),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "$hoursStr:$minutesStr:$secondsStr",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 75.0,
               ),
             ),
-            SizedBox(height: 30.0),
+            const SizedBox(height: 30.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                     onPressed: () {
                       if (timerSubscription != null) {
-                        if (timerSubscription!.isPaused)
+                        if (timerSubscription!.isPaused) {
                           timerSubscription!.resume();
+                        }
                       }
                       if (timerSubscription == null) {
                         timerStream = cronoStream();
@@ -99,15 +102,15 @@ class _CronoPageState extends State<CronoPage> {
                         });
                       }
                     },
-                    icon: Icon(Icons.play_arrow)),
-                SizedBox(width: 40.0),
+                    icon: const Icon(Icons.play_arrow)),
+                const SizedBox(width: 40.0),
                 IconButton(
                     onPressed: () {
                       if (timerSubscription != null) timerSubscription!.pause();
                       setState(() {});
                     },
-                    icon: Icon(Icons.pause)),
-                SizedBox(width: 40.0),
+                    icon: const Icon(Icons.pause)),
+                const SizedBox(width: 40.0),
                 IconButton(
                     onPressed: () {
                       if (timerSubscription != null) {
@@ -120,7 +123,7 @@ class _CronoPageState extends State<CronoPage> {
                         secondsStr = '00';
                       });
                     },
-                    icon: Icon(Icons.stop)),
+                    icon: const Icon(Icons.stop)),
               ],
             ),
           ],
