@@ -139,8 +139,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class HomeListCard extends StatelessWidget {
-  final IconData icon = Icons.run_circle_outlined;
+class HomeListCard extends StatefulWidget {
   String name = '';
   DateTime start = DateTime.now();
   DateTime? end;
@@ -157,18 +156,25 @@ class HomeListCard extends StatelessWidget {
   }
 
   @override
+  State<HomeListCard> createState() => _HomeListCardState();
+}
+
+class _HomeListCardState extends State<HomeListCard> {
+  final IconData icon = Icons.run_circle_outlined;
+
+  @override
   Widget build(BuildContext context) {
     var strAyer = '';
     initializeDateFormatting('es_ES', null);
     // Intl.defaultLocale = 'es';
     DateTime dtAyer = DateTime.now().subtract(const Duration(days: 1));
-    if (start.year == dtAyer.year &&
-        start.month == dtAyer.month &&
-        start.day == dtAyer.day) {
+    if (widget.start.year == dtAyer.year &&
+        widget.start.month == dtAyer.month &&
+        widget.start.day == dtAyer.day) {
       strAyer = 'Ayer';
     }
-    String startActivity = '$strAyer ${DateFormat.yMMMd('es').format(start)} '
-        '${DateFormat.Hm().format(start)}';
+    String startActivity = '$strAyer ${DateFormat.yMMMd('es').format(widget.start)} '
+        '${DateFormat.Hm().format(widget.start)}';
     return Card(
       shadowColor: Colors.grey,
       child: Row(
@@ -184,7 +190,7 @@ class HomeListCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      widget.name,
                       style: GoogleFonts.montserrat(
                           textStyle: Theme.of(context).textTheme.headline6),
                     ),
@@ -199,7 +205,7 @@ class HomeListCard extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerRight,
               child: Text(
-                '$quantity $_dimension',
+                '${widget.quantity} ${widget._dimension}',
                 style: GoogleFonts.montserrat(
                     textStyle: Theme.of(context).textTheme.headline5),
               ),
